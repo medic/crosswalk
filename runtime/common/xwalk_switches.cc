@@ -65,7 +65,7 @@ const char kPpapiFlashVersion[] = "ppapi-flash-version";
 // all of its state.
 const char kUserDataDir[] = "user-data-dir";
 
-// Overrides per-origin quota settings to unlimited storage for any
+// Overrides per-origin quota settings to unlimited storage for all
 // apps/origins.
 const char kUnlimitedStorage[] = "unlimited-storage";
 

@@ -91,7 +91,6 @@ void HandleReadError(PersistentPrefStore::PrefReadError error) {
 XWalkBrowserContext::XWalkBrowserContext()
     : resource_context_(new RuntimeResourceContext),
     save_form_data_(true) {
-    LOG(WARNING) << "XWalkBrowserContext::XWalkBrowserContext() :: ENTRY";
   InitWhileIOAllowed();
   InitFormDatabaseService();
   InitVisitedLinkMaster();
@@ -113,7 +112,6 @@ XWalkBrowserContext::~XWalkBrowserContext() {
 
 // static
 XWalkBrowserContext* XWalkBrowserContext::GetDefault() {
-    LOG(WARNING) << "XWalkBrowserContext::GetDefault() :: ENTRY";
   // TODO(joth): rather than store in a global here, lookup this instance
   // from the Java-side peer.
   return g_browser_context;
@@ -215,8 +213,10 @@ XWalkBrowserContext::GetGuestManager() {
 }
 
 storage::SpecialStoragePolicy* XWalkBrowserContext::GetSpecialStoragePolicy() {
-    LOG(WARNING) << "XWalkBrowserContext::GetSpecialStoragePolicy() :: ENTRY";
-    LOG(WARNING) << "XWalkBrowserContext::GetSpecialStoragePolicy() :: switch value: " << (base::CommandLine::ForCurrentProcess()->HasSwitch(switches::kUnlimitedStorage));
+  LOG(WARNING) << "XWalkBrowserContext::GetSpecialStoragePolicy() :: " <<
+          "--unlimited-storage switch value: " <<
+          (base::CommandLine::ForCurrentProcess()->HasSwitch(
+                  switches::kUnlimitedStorage));
   // TODO cache the XwalkSpecialStoragePolicy instance?
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kUnlimitedStorage))

@@ -1,8 +1,5 @@
 #include <iostream>
 
-#include "base/logging.h"
-#include "extensions/common/constants.h"
-#include "url/gurl.h"
 #include "xwalk/runtime/browser/xwalk_special_storage_policy.h"
 
 using namespace xwalk;
