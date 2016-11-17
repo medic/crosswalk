@@ -1,47 +1,51 @@
 #include <iostream>
 
 #include "base/logging.h"
+#include "extensions/common/constants.h"
+#include "url/gurl.h"
 #include "xwalk/runtime/browser/xwalk_special_storage_policy.h"
 
 using namespace xwalk;
 
-XWalkSpecialStoragePolicy::XWalkSpecialStoragePolicy(void) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::XWalkSpecialStoragePolicy() CONSTRUCTOR CALLED";
-}
+XWalkSpecialStoragePolicy::XWalkSpecialStoragePolicy(void) {}
 
 XWalkSpecialStoragePolicy::~XWalkSpecialStoragePolicy(void) {}
 
 bool XWalkSpecialStoragePolicy::IsStorageProtected(const GURL& origin) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::IsStorageProtected() CALLED";
+  // Prevent data being removed by the browsing data remover.
   return true;
 }
 
 bool XWalkSpecialStoragePolicy::IsStorageUnlimited(const GURL& origin) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::IsStorageProtected() CALLED";
-   return true;
-}
-
-bool XWalkSpecialStoragePolicy::IsStorageSessionOnly(const GURL& origin) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::IsStorageSessionOnly() CALLED";
-  return false;
-}
-
-bool XWalkSpecialStoragePolicy::CanQueryDiskSize(const GURL& origin) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::CanQueryDiskSize() CALLED";
-  return true;
-}
-
-bool XWalkSpecialStoragePolicy::HasIsolatedStorage(const GURL& origin) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::HasIsolatedStorage() CALLED";
-  return true;
-}
-
-bool XWalkSpecialStoragePolicy::HasSessionOnlyOrigins() {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::HasSessionOnlyOrigins() CALLED";
+  // Prevent data being affected by quota or storage pressure eviction.
   return true;
 }
 
 bool XWalkSpecialStoragePolicy::IsStorageDurable(const GURL& origin) {
-   LOG(WARNING) << "XWalkSpecialStoragePolicy::IsStorageDurable() CALLED";
+  // Prevent storage pressure eviction.
   return true;
+}
+
+bool XWalkSpecialStoragePolicy::CanQueryDiskSize(const GURL& origin) {
+  // Let anything query remaining disk size.  This could potentially allow for
+  // fingerprinting of a user, but seems less of a risk in a crosswalk app than
+  // it would in a more general browser.
+  return true;
+}
+
+bool XWalkSpecialStoragePolicy::HasIsolatedStorage(const GURL& origin) {
+  // I don't actually know if Crosswalk can guarantee if there is isolated
+  // storage or not.  Chrome seems to implement this through a special plugin,
+  // so it seems safe to say that we can't guarantee that storage is isolated.
+  return false;
+}
+
+bool XWalkSpecialStoragePolicy::IsStorageSessionOnly(const GURL& origin) {
+  // As per HasSessionOnlyOrigins(), no origins are session-only.
+  return false;
+}
+
+bool XWalkSpecialStoragePolicy::HasSessionOnlyOrigins() {
+  // Do not allow any origins to have session-only storage.
+  return false;
 }
