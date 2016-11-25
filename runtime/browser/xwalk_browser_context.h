@@ -147,6 +147,8 @@ class XWalkBrowserContext
   std::unique_ptr<XWalkSSLHostStateDelegate> ssl_host_state_delegate_;
   std::unique_ptr<content::PermissionManager> permission_manager_;
 
+  storage::SpecialStoragePolicy* special_storiage_policy_;
+
   DISALLOW_COPY_AND_ASSIGN(XWalkBrowserContext);
 };
 

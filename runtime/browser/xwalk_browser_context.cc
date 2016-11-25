@@ -96,6 +96,9 @@ XWalkBrowserContext::XWalkBrowserContext()
   InitVisitedLinkMaster();
   CHECK(!g_browser_context);
   g_browser_context = this;
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
+          switches::kUnlimitedStorage))
+    special_storiage_policy_ = new XWalkSpecialStoragePolicy();
 }
 
 XWalkBrowserContext::~XWalkBrowserContext() {
@@ -213,11 +216,7 @@ XWalkBrowserContext::GetGuestManager() {
 }
 
 storage::SpecialStoragePolicy* XWalkBrowserContext::GetSpecialStoragePolicy() {
-  // TODO cache the XwalkSpecialStoragePolicy instance?
-  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
-          switches::kUnlimitedStorage))
-    return new xwalk::XWalkSpecialStoragePolicy();
-  return NULL;
+  return special_storiage_policy_;
 }
 
 content::PushMessagingService* XWalkBrowserContext::GetPushMessagingService() {
